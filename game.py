@@ -33,6 +33,16 @@ def main():
             if event.type == py.QUIT:
                 running = False
                 break
+            # Check for KEYDOWN events
+            if event.type == py.KEYDOWN:
+                if event.key == py.K_UP:
+                    pass #print("Up arrow key pressed")
+                elif event.key == py.K_DOWN:
+                    pass # print("Down arrow key pressed")
+                elif event.key == py.K_LEFT:
+                    board[len(board) - 1].moveleft()
+                elif event.key == py.K_RIGHT:
+                    board[len(board) - 1].moveright()
             
         DrawUI(playSurface)
 
@@ -80,5 +90,5 @@ def printBoard():
         print(row)
 
 if __name__ == '__main__':
-    printBoard()
+    # printBoard()
     main()

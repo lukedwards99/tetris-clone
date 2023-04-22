@@ -81,7 +81,11 @@ class Piece(GameObject):
         X_WIDTH = surface.get_width() / self.NUM_COLS
         Y_HEIGHT = surface.get_height() / self.NUM_ROWS
 
+        #draw a rect at self.x and self.y that is X_WIDTH by Y_HEIGHT
+        py.draw.rect(surface, (255,255,255), (self.x * X_WIDTH + self.GRID_WIDTH, self.y * Y_HEIGHT + self.GRID_WIDTH, X_WIDTH- self.GRID_WIDTH, Y_HEIGHT- self.GRID_WIDTH))
+
         for i in range(len(self.matrix)):
             for j in range(len(self.matrix[i])):
                 if self.matrix[i][j] == 1:
-                    py.draw.rect(surface, self.color, (self.x + j * X_WIDTH, self.y + i * Y_HEIGHT, X_WIDTH - self.GRID_WIDTH, Y_HEIGHT - self.GRID_WIDTH))
+                    py.draw.rect(surface, self.color, ((self.x + j) * X_WIDTH + self.GRID_WIDTH, (self.y + i) * Y_HEIGHT + self.GRID_WIDTH,
+                                                       X_WIDTH - self.GRID_WIDTH, Y_HEIGHT - self.GRID_WIDTH))
