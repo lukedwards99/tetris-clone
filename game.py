@@ -2,6 +2,8 @@ import pygame as py
 from assets import *
 import sys
 
+# UI CONSTANTS
+
 HEIGHT = 720
 WIDTH = 720
 
@@ -12,11 +14,19 @@ NUM_ROWS = 20
 
 GRID_BORDER_WIDTH = 2
 
+# GAME CONSTANTS
+movespeed = 1
+deltamovespeed = 0
+
 board = list() #list to hold all the pieces on the playfield
 board.append(Piece(NUM_ROWS, NUM_COLS, GRID_BORDER_WIDTH))
 
 
 def main():
+
+    global movespeed
+    global deltamovespeed
+
     py.init()
     screen = py.display.set_mode((HEIGHT, WIDTH))
     playSurface = py.Surface((WIDTH * .6 - UI_BORDER * 2, HEIGHT - UI_BORDER * 2))
@@ -25,8 +35,6 @@ def main():
     running = True
     dt = 0
     font = py.font.Font(None, 36)
-
-    player_pos = py.Vector2(screen.get_width() / 2, screen.get_height() / 2)
 
     while running:
         for event in py.event.get():
@@ -43,6 +51,20 @@ def main():
                     board[len(board) - 1].moveleft()
                 elif event.key == py.K_RIGHT:
                     board[len(board) - 1].moveright()
+        
+        # check for time events
+
+        
+        #check if move
+        piece_set = False
+        if deltamovespeed >= movespeed:
+            piece_set = board[len(board) - 1].movedown()
+            deltamovespeed = 0
+        else:
+            deltamovespeed += dt
+        
+        if piece_set:
+            board.append(Piece(NUM_ROWS, NUM_COLS, GRID_BORDER_WIDTH))
             
         DrawUI(playSurface)
 

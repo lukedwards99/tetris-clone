@@ -21,17 +21,18 @@ class GameObject:
         raise NotImplementedError("can not call draw on base class")
 
 class Piece(GameObject):
-    def __init__(self, num_rows: int, num_cols: int, grid_width: int) -> None:
+    def __init__(self, num_rows: int, num_cols: int, grid_border_width: int) -> None:
         self.type = PieceType(random.randint(1, 3))
         self.rotation = Rotation(random.randint(1, 4))
-        self.x = 3
-        self.y = 3
+        self.x = random.randint(0, num_cols - 1)
+        self.y = 0
         self.matrix = []
         self.color = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
+        self.placed = False
 
         self.NUM_ROWS = num_rows
         self.NUM_COLS = num_cols
-        self.GRID_WIDTH = grid_width
+        self.GRID_BORDER_WIDTH = grid_border_width
 
         if self.type == PieceType.I:
             self.matrix = [
@@ -58,8 +59,14 @@ class Piece(GameObject):
     def rotate_90_counterclockwise(self):
         return [list(row) for row in zip(*reversed(self.matrix))]
 
-    def movedown(self) -> None:
-        self.y += 1
+    def movedown(self) -> bool:
+        if self.y + len(self.matrix) < self.NUM_ROWS:
+            self.y += 1
+            return False
+        else:
+            self.placed = True
+            return True
+        
     
     def moveleft(self) -> None:
         self.x -= 1
@@ -82,10 +89,11 @@ class Piece(GameObject):
         Y_HEIGHT = surface.get_height() / self.NUM_ROWS
 
         #draw a rect at self.x and self.y that is X_WIDTH by Y_HEIGHT
-        py.draw.rect(surface, (255,255,255), (self.x * X_WIDTH + self.GRID_WIDTH, self.y * Y_HEIGHT + self.GRID_WIDTH, X_WIDTH- self.GRID_WIDTH, Y_HEIGHT- self.GRID_WIDTH))
+        # py.draw.rect(surface, (255,255,255), (self.x * X_WIDTH + self.GRID_BORDER_WIDTH, self.y * Y_HEIGHT + self.GRID_BORDER_WIDTH, 
+        #                                       X_WIDTH- self.GRID_BORDER_WIDTH, Y_HEIGHT- self.GRID_BORDER_WIDTH))
 
         for i in range(len(self.matrix)):
             for j in range(len(self.matrix[i])):
                 if self.matrix[i][j] == 1:
-                    py.draw.rect(surface, self.color, ((self.x + j) * X_WIDTH + self.GRID_WIDTH, (self.y + i) * Y_HEIGHT + self.GRID_WIDTH,
-                                                       X_WIDTH - self.GRID_WIDTH, Y_HEIGHT - self.GRID_WIDTH))
+                    py.draw.rect(surface, self.color, ((self.x + j) * X_WIDTH + self.GRID_BORDER_WIDTH, (self.y + i) * Y_HEIGHT + self.GRID_BORDER_WIDTH,
+                                                       X_WIDTH - self.GRID_BORDER_WIDTH, Y_HEIGHT - self.GRID_BORDER_WIDTH))
