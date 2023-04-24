@@ -18,8 +18,8 @@ GRID_BORDER_WIDTH = 2
 movespeed = 1
 deltamovespeed = 0
 
-board = list() #list to hold all the pieces on the playfield
-board.append(Piece(NUM_ROWS, NUM_COLS, GRID_BORDER_WIDTH))
+board = Board(NUM_ROWS, NUM_COLS, GRID_BORDER_WIDTH) #list to hold all the pieces on the playfield
+board.set_current_piece(Piece(NUM_ROWS, NUM_COLS, GRID_BORDER_WIDTH))
 
 
 def main():
@@ -48,28 +48,24 @@ def main():
                 elif event.key == py.K_DOWN:
                     pass # print("Down arrow key pressed")
                 elif event.key == py.K_LEFT:
-                    board[len(board) - 1].moveleft()
+                    board.get_current_piece().moveleft()
                 elif event.key == py.K_RIGHT:
-                    board[len(board) - 1].moveright()
+                    board.get_current_piece().moveright()
         
         # check for time events
 
         
-        #check if move
-        piece_set = False
         if deltamovespeed >= movespeed:
-            piece_set = board[len(board) - 1].movedown()
+            board.movePieceDown()
             deltamovespeed = 0
         else:
             deltamovespeed += dt
-        
-        if piece_set:
-            board.append(Piece(NUM_ROWS, NUM_COLS, GRID_BORDER_WIDTH))
             
         DrawUI(playSurface)
 
-        for piece in board:
-            piece.draw(playSurface)
+        board.get_current_piece().draw(playSurface)
+
+        
 
         screen.blit(playSurface, (UI_BORDER, UI_BORDER))
 
