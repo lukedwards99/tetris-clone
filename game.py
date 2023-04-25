@@ -15,7 +15,7 @@ NUM_ROWS = 20
 GRID_BORDER_WIDTH = 2
 
 # GAME CONSTANTS
-movespeed = 1
+movespeed = .5
 deltamovespeed = 0
 
 board = Board(NUM_ROWS, NUM_COLS, GRID_BORDER_WIDTH) #list to hold all the pieces on the playfield
@@ -44,26 +44,29 @@ def main():
             # Check for KEYDOWN events
             if event.type == py.KEYDOWN:
                 if event.key == py.K_UP:
-                    pass #print("Up arrow key pressed")
+                    board.rotate_90()
                 elif event.key == py.K_DOWN:
-                    pass # print("Down arrow key pressed")
+                    board.rotate_90_counterclockwise()
                 elif event.key == py.K_LEFT:
-                    board.get_current_piece().moveleft()
+                    board.moveleft()
                 elif event.key == py.K_RIGHT:
-                    board.get_current_piece().moveright()
+                    board.moveright()
         
         # check for time events
 
         
         if deltamovespeed >= movespeed:
-            board.movePieceDown()
+            board.movedown()
+            print("Piece is at: " + str(board.active_piece().x) + ", " + str(board.active_piece().y))
             deltamovespeed = 0
         else:
             deltamovespeed += dt
             
         DrawUI(playSurface)
 
-        board.get_current_piece().draw(playSurface)
+        # board.get_current_piece().draw(playSurface)
+
+        board.draw(playSurface)
 
         
 
